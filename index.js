@@ -2,7 +2,6 @@ const createPlayer = (name, marker) => {
     return {name, marker};
 };
 
-
 const gameBoard = (() => {
     let board = Array(9).fill("");
 
@@ -12,14 +11,31 @@ const gameBoard = (() => {
     // reset the board by removing all moves
     const resetBoard = () => board.fill("");
 
+    // play again
+    const playAgain = () => {
+        const newRound = confirm("Do you want to play again?");
+        if (newRound) {
+            resetBoard(); // Clear the board
+            const tiles = document.querySelectorAll(".tile");
+            tiles.forEach(tile => (tile.textContent = "")); // Clear the UI
+        } else {
+            alert("Thanks for playing!");
+        }
+    };
+
     const makeMove = (index, marker) => {
         if (index >= 0 && index < 9 && board[index] === "") {
             board[index] = marker;
+            const tile = document.querySelector(`[data-index="${index}"]`); 
+            if (tile) { // check if the tile exists in the DOM
+                tile.textContent = marker; // update the tile's text content with the marker
+            }
             return true;
         } else {
             alert("Invalid move. Please place your marker in an empty slot.");
             return false;
         }
+        
         
     };
 
@@ -51,7 +67,7 @@ const gameBoard = (() => {
     };
 
     
-    return {getBoard, resetBoard, makeMove, checkWin, displayBoard};
+    return {getBoard, playAgain, makeMove, checkWin, displayBoard};
 
 })();
 
@@ -59,37 +75,38 @@ const gameBoard = (() => {
 function game() {
     const player1 = createPlayer("Player 1", "X");
     const player2 = createPlayer("Player 2", "O");
-    
+
     let currentPlayer = player1;
 
-    // switch between players after each marker placement
-    for (let i = 0; i < 9; i++) {
-        gameBoard.displayBoard();
-        console.log(currentPlayer);
-        
-        let userMove = parseInt(prompt(currentPlayer.name + " enter a move (0-8): "), 10);
-        gameBoard.makeMove(userMove, currentPlayer.marker);
-        
-        // check if current player won after each marker placement
-        if (gameBoard.checkWin(currentPlayer)) {
-            alert(currentPlayer.name + " won!");
-            break;
-        } else if (i === 8) {
-            alert("Tie!");
-        }
-        
-        currentPlayer = currentPlayer === player1 ? player2 : player1;
-    }
-    
-   
-    const playAgain = confirm("Do you want to play again?");
-    if (playAgain) {
-        gameBoard.resetBoard();
-        game(); // restart the game
-    } else {
-        alert("Thanks for playing!");
-    }
+    document.addEventListener("click", (e) => {
+        if (e.target.matches(".tile")) {
+            gameBoard.displayBoard();
 
+            let userMove = Number(e.target.dataset.index);
+
+            gameBoard.makeMove(userMove, currentPlayer.marker);
+
+            // delay alerts to allow winning marker to be placed
+            if (gameBoard.checkWin(currentPlayer)) {
+                setTimeout(() => {
+                    alert(currentPlayer.name + " won!");
+                    gameBoard.playAgain();
+                }, 100);
+                return;
+            } 
+            
+            if (gameBoard.getBoard().every(cell => cell !== "")) {
+                setTimeout(() => {
+                    alert("Tie!");
+                    gameBoard.playAgain();
+                }, 100);
+                return;
+                
+            }
+            // switch between players after a valid move
+            currentPlayer = currentPlayer === player1 ? player2 : player1;
+        }
+    })
 }
 
 game();
