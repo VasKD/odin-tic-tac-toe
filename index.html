@@ -9,12 +9,43 @@
     <!-- Boldonse -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Boldonse&display=swap" rel="stylesheet">
+    <!-- Montsterrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+
+    <dialog id="welcomeModal">
+        <p>Welcome to Tic Tac Toe!</p>
+        <form id="playerNames" action="" method="post">
+            <label for="player1">Player One</label>
+            <input type="text" id="player1" name="player1" placeholder="Name" required>
+
+            <label for="player2">Player Two</label>
+            <input type="text" id="player2" name="player2" placeholder="Name" required>
+
+            <button type="submit">Submit</button>
+        </form> 
+    </dialog>
     
     <div class="title">
         <p>Tic Tac Toe</p>
     </div>
+
+    <div class="player-icons">
+        <img src="./img/file-person.svg" alt="player one icon">
+        <img src="./img/file-person-fill.svg" alt="player two icon">
+    </div>
+    
+    <div id="player-one-name">
+        <p class="player-one">Player One</p>
+    </div>
+
+    <div id="player-two-name">
+        <p class="player-two">Player Two</p>
+    </div>
+
 
     <div class="board">
         <div class="tile" data-index="0"></div>

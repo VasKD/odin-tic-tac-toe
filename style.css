@@ -1,5 +1,92 @@
 body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color: rgb(255, 199, 58);
+    overflow: hidden;
+    
+}
+
+#welcomeModal {
+    font-family: "Boldonse", system-ui;
+    position: absolute;
+    border-radius: 20px;
+    box-shadow: 4px 4px black;
+    margin-top: 10%;
+    z-index: 1;
+    width: 300px;
+    transform: scale(1.4);
+}
+
+#welcomeModal p {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.637);
+}
+
+#playerNames, button {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+}
+
+#playerNames input {
+    margin: 5px 0 10px;
+    height: 20px;
+    border-radius: 8px;
+    padding-left: 10px;
+}
+
+#playerNames button {
+    width: 80px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.player-icons {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 35%; /* Move to the vertical center */
+    left: 50%; /* Move to the horizontal center */
+    transform: translate(-50%, -50%); /* Adjust for the element's size */
+    gap: 60vw;
+}
+
+.player-one {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 42%; /* Move to the vertical center */
+    left: 19.5%; /* Move to the horizontal center */
+    transform: translate(-50%, -50%); /* Adjust for the element's size */
+}
+
+
+.player-two {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 42%; /* Move to the vertical center */
+    left: 80.5%; /* Move to the horizontal center */
+    transform: translate(-50%, -50%); /* Adjust for the element's size */
+}
+
+.player-icons img {
+    transform: scale(6);
 }
 
 .title {
@@ -41,8 +128,8 @@ body {
 }
 
 /* When a player wins highlight the row*/
-/* .tile:hover {
-    background-color: rgb(195, 195, 195);
-    color: white;
-} */
+.tile:hover {
+    background-color: rgb(239, 239, 239);
+    transform: scale(1.05);
+}
 

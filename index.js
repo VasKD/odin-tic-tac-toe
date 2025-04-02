@@ -20,6 +20,7 @@ const gameBoard = (() => {
             tiles.forEach(tile => (tile.textContent = "")); // Clear the UI
         } else {
             alert("Thanks for playing!");
+            return;
         }
     };
 
@@ -46,7 +47,7 @@ const gameBoard = (() => {
     ];
 
     const checkWin = (player) => {
-        for (let combo of winningCombos) {
+        for (const combo of winningCombos) {
             const [a, b, c] = combo;
             if (board[a] === player.marker && board[b] === player.marker && board[c] === player.marker){
                 return true;
@@ -72,43 +73,71 @@ const gameBoard = (() => {
 })();
 
 
+function displayNames (name1, name2) {
+    let player1 = document.querySelector(".player-one");
+    let player2 = document.querySelector(".player-two");
+
+    player1.textContent = name1 + " (X)";
+    player2.textContent = name2 + " (O)";
+}
+
+
 function game() {
-    const player1 = createPlayer("Player 1", "X");
-    const player2 = createPlayer("Player 2", "O");
+    const dialog = document.getElementById("welcomeModal");
+    dialog.showModal();
 
-    let currentPlayer = player1;
+    let player1;
+    let player2;
 
-    document.addEventListener("click", (e) => {
-        if (e.target.matches(".tile")) {
-            gameBoard.displayBoard();
+    let form = document.getElementById("playerNames");
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let player1Name = document.getElementById("player1").value;
+        let player2Name = document.getElementById("player2").value;
 
-            let userMove = Number(e.target.dataset.index);
+        player1 = createPlayer(player1Name, "X");
+        player2 = createPlayer(player2Name, "O");
+        displayNames(player1Name, player2Name);
 
-            gameBoard.makeMove(userMove, currentPlayer.marker);
+        let currentPlayer = player1;
+        console.log(player1.name);
 
-            // delay alerts to allow winning marker to be placed
-            if (gameBoard.checkWin(currentPlayer)) {
-                setTimeout(() => {
-                    alert(currentPlayer.name + " won!");
-                    gameBoard.playAgain();
-                }, 100);
-                return;
-            } 
-            
-            if (gameBoard.getBoard().every(cell => cell !== "")) {
-                setTimeout(() => {
-                    alert("Tie!");
-                    gameBoard.playAgain();
-                }, 100);
-                return;
+        dialog.close();
+
+        document.addEventListener("click", (e) => {
+            if (e.target.matches(".tile")) {
+                gameBoard.displayBoard();
+
+                let userMove = Number(e.target.dataset.index);
+
+                gameBoard.makeMove(userMove, currentPlayer.marker);
+
+                // delay alerts to allow winning marker to be placed
+                if (gameBoard.checkWin(currentPlayer)) {
+                    setTimeout(() => {
+                        alert(currentPlayer.name + " won!");
+                        gameBoard.playAgain();
+                    }, 100);
+                    return;
+                } 
                 
+                if (gameBoard.getBoard().every(cell => cell !== "")) {
+                    setTimeout(() => {
+                        alert("Tie!");
+                        gameBoard.playAgain();
+                    }, 100);
+                    return;
+                    
+                }
+                // switch between players after a valid move
+                currentPlayer = currentPlayer === player1 ? player2 : player1;
             }
-            // switch between players after a valid move
-            currentPlayer = currentPlayer === player1 ? player2 : player1;
-        }
-    })
+        })
+        
+    });
 }
 
 game();
+
 
 
