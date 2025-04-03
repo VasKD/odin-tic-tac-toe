@@ -155,6 +155,7 @@ function game() {
                 if (gameBoard.getBoard().every(cell => cell !== "")) {
                     setTimeout(() => {
                         displayResults("tie");
+                        playAgainBtn.addEventListener("click", gameBoard.playAgain);
                     }, 150);
                     return;
                     
