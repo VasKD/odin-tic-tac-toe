@@ -13,15 +13,10 @@ const gameBoard = (() => {
 
     // play again
     const playAgain = () => {
-        const newRound = confirm("Do you want to play again?");
-        if (newRound) {
-            resetBoard(); // Clear the board
-            const tiles = document.querySelectorAll(".tile");
-            tiles.forEach(tile => (tile.textContent = "")); // Clear the UI
-        } else {
-            alert("Thanks for playing!");
-            return;
-        }
+        resetBoard(); // Clear the board
+        const tiles = document.querySelectorAll(".tile");
+        tiles.forEach(tile => (tile.textContent = "")); // Clear the UI
+        displayResults("none");
     };
 
     const makeMove = (index, marker) => {
@@ -35,8 +30,7 @@ const gameBoard = (() => {
         } else {
             alert("Invalid move. Please place your marker in an empty slot.");
             return false;
-        }
-        
+        }      
         
     };
 
@@ -73,6 +67,7 @@ const gameBoard = (() => {
 })();
 
 
+// display names of each player
 function displayNames (name1, name2) {
     let player1 = document.querySelector(".player-one");
     let player2 = document.querySelector(".player-two");
@@ -82,27 +77,63 @@ function displayNames (name1, name2) {
 }
 
 
-function game() {
-    const dialog = document.getElementById("welcomeModal");
-    dialog.showModal();
+// display results in modal after the game is finished
+function displayResults(result, playerName = "") {
+    const resultModal = document.getElementById("result-modal");
+    let modalMessage = document.querySelector(".modal-message");
+    if (result === "none") {
+        resultModal.style.display = "none";
+    } else if (result === "win") {
+        modalMessage.textContent = playerName + " Wins!";
+        resultModal.style.display = "flex";
+    } else if (result === "tie") {
+        modalMessage.textContent = "It's A Tie!";
+        resultModal.style.display = "flex";
+    }  
 
+}
+
+
+function game() {
     let player1;
     let player2;
+    let currentPlayer;
 
+    const playAgainBtn = document.getElementById("play-again");
+    const welcomeModal = document.getElementById("welcome-modal");
+    const playerOneIcon = document.getElementById("player-one-img");
+    const playerTwoIcon = document.getElementById("player-two-img");
+    welcomeModal.showModal();
+
+    // highlight the icon of the current player
+    const updateCurrentPlayerUI = () => {
+        if (currentPlayer === player1) {
+            playerOneIcon.classList.add("active");
+            playerTwoIcon.classList.remove("active");
+        } else {
+            playerOneIcon.classList.remove("active");
+            playerTwoIcon.classList.add("active");
+        }
+    };
+
+ 
     let form = document.getElementById("playerNames");
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         let player1Name = document.getElementById("player1").value;
         let player2Name = document.getElementById("player2").value;
 
+        // create player objects and display their names
         player1 = createPlayer(player1Name, "X");
         player2 = createPlayer(player2Name, "O");
         displayNames(player1Name, player2Name);
 
-        let currentPlayer = player1;
-        console.log(player1.name);
+        // X goes first
+        currentPlayer = player1;
+        updateCurrentPlayerUI();
 
-        dialog.close();
+        // Close dialog window after submission
+        welcomeModal.close();
 
         document.addEventListener("click", (e) => {
             if (e.target.matches(".tile")) {
@@ -115,22 +146,23 @@ function game() {
                 // delay alerts to allow winning marker to be placed
                 if (gameBoard.checkWin(currentPlayer)) {
                     setTimeout(() => {
-                        alert(currentPlayer.name + " won!");
-                        gameBoard.playAgain();
-                    }, 100);
+                        displayResults("win", currentPlayer.name);
+                        playAgainBtn.addEventListener("click", gameBoard.playAgain);
+                    }, 150);
                     return;
                 } 
                 
                 if (gameBoard.getBoard().every(cell => cell !== "")) {
                     setTimeout(() => {
-                        alert("Tie!");
-                        gameBoard.playAgain();
-                    }, 100);
+                        displayResults("tie");
+                    }, 150);
                     return;
                     
                 }
                 // switch between players after a valid move
                 currentPlayer = currentPlayer === player1 ? player2 : player1;
+                updateCurrentPlayerUI();
+
             }
         })
         

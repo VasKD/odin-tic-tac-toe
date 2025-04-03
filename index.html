@@ -16,7 +16,7 @@
 </head>
 <body>
 
-    <dialog id="welcomeModal">
+    <dialog id="welcome-modal">
         <p>Welcome to Tic Tac Toe!</p>
         <form id="playerNames" action="" method="post">
             <label for="player1">Player One</label>
@@ -33,9 +33,18 @@
         <p>Tic Tac Toe</p>
     </div>
 
+    <div class="btns">
+        <button id="play-again">Play Again</button>
+    </div>
+    
+    <dialog id="result-modal">
+        <p class="modal-message">Player 1 Wins!</p>
+        <p class="play-again">Press "Play Again" To Start A New Game</p>
+    </dialog>
+
     <div class="player-icons">
-        <img src="./img/file-person.svg" alt="player one icon">
-        <img src="./img/file-person-fill.svg" alt="player two icon">
+        <img id="player-one-img" src="./img/file-person.svg" alt="player one icon">
+        <img id="player-two-img" src="./img/file-person-fill.svg" alt="player two icon">
     </div>
     
     <div id="player-one-name">
